@@ -1,0 +1,87 @@
+# Quiet Cove / Тихая заводь — тексты черновика консоли
+# Не класть этот файл в upload ZIP.
+
+## Общее
+Возраст: 6+
+Ориентация: Портретная
+Платформы: Мобильные + Десктоп
+Категории: Симулятор, Казуальные
+Игра использует облачные сохранения: да
+Версия: 0.2.0.0
+Издатель: hiThere games
+Игра переведена на: Русский
+(UI также переключается на English по SDK — при отдельной EN-витрине заполнить блок EN)
+
+Ключевые слова: рыбалка, удочка, пруд, коллекция, спокойная, симулятор
+
+ИИ: ИИ использовался частично (код и тексты)
+
+---
+
+## RU
+
+Название (≤50):
+Тихая заводь
+
+Описание для SEO (50–160):
+Спокойная рыбалка на рассвете: заброс, поклёвка, вываживание и журнал улова.
+
+Короткое описание (≤70):
+Забрасывайте удочку, ловите рыбу и ведите журнал.
+
+Об игре:
+Тихая заводь — казуальный симулятор рыбалки на одном уютном пирсе. Вы забрасываете удочку, следите за поплавком, подсекаете в нужный момент и вываживаете рыбу, удерживая натяжение лески. Пойманных рыб можно продать или поставить в аквариум-витрину, открывать записи в журнале и улучшать снасти. Игра мягкая, без страшных сцен — для спокойных коротких сессий.
+
+Как играть:
+1. Нажмите «На пирс».
+2. Удерживайте «Забросить», чтобы выбрать силу, и отпустите.
+3. Следите за поплавком; когда он резко уйдёт вниз — нажмите «Подсечь!».
+4. Удерживайте «Подтягивать», чтобы держать натяжение в зелёной зоне.
+5. Продайте улов или отправьте рыбу в аквариум. Открывайте журнал и магазин из меню.
+
+Комментарий разработчика:
+Привет! Это hiThere games.
+
+Это первая версия, и мы будем её дорабатывать: новый контент, удобство и мелочи, которые делают игру теплее.
+
+SDK Яндекс Игр: облачные сохранения, реклама (fullscreen / rewarded), покупки косметики. Если что-то понравилось, запутало или хочется рядом — напишите в отзыве. Спасибо, что заглянули.
+
+---
+
+## EN (optional catalog)
+
+Title:
+Quiet Cove
+
+SEO:
+Calm dawn fishing: cast, bite, reel, and collect fish in your journal.
+
+Short:
+Cast, hook, reel — grow your catch journal.
+
+About:
+Quiet Cove is a cozy fishing sim on a single pier. Cast your line, watch the float, hook at the right moment, and keep line tension in the green zone. Sell fish or display them in the aquarium, fill the journal, and upgrade gear. Soft tone, no scary content — short relaxing sessions.
+
+How to play:
+1. Tap “To the pier”.
+2. Hold Cast to set power, then release.
+3. When the float dips hard, tap Hook.
+4. Hold Reel to stay in the green tension zone.
+5. Sell the catch or keep it in the aquarium. Use Journal and Shop from the menu.
+
+Developer comment:
+Hi! This is hiThere games.
+
+This is the first version, and we’ll keep improving it. Yandex Games SDK: cloud saves, ads, cosmetic IAP. Feedback really helps. Thanks for stopping by.
+
+---
+
+## Чеклист перед модерацией
+- [ ] Архив quiet-cove.zip: index.html в корне, без promo/skills/README
+- [ ] Возраст 6+, тон совпадает
+- [ ] LoadingAPI.ready после языка
+- [ ] GameplayAPI start/stop
+- [ ] localStorage + cloud
+- [ ] RV только по кнопке; FS не в первые 90 с
+- [ ] Скрины mobile 9:16 и desktop 16:9 (?shot=&layout=)
+- [ ] Название уникальное, совпадает с UI

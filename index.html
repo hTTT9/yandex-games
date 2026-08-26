@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#1e4a5c" />
+  <title>Тихая заводь</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/classic.css" />
+  <script src="/sdk.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div id="boot" class="screen active" aria-live="polite">
+      <div class="boot-glow"></div>
+      <div class="boot-card">
+        <div class="boot-ripple"></div>
+        <p class="boot-title" data-i18n="boot.title">Тихая заводь</p>
+        <p class="boot-sub" data-i18n="boot.loading">Загрузка…</p>
+      </div>
+    </div>
+
+    <div id="menu" class="screen">
+      <div class="menu-hero">
+        <canvas id="menu-canvas" width="420" height="360"></canvas>
+        <div class="menu-hero-fade"></div>
+        <div class="menu-hero-copy">
+          <p class="brand" data-i18n="game.title">Тихая заводь</p>
+          <p class="menu-tag" data-i18n="menu.tag">Рыбалка на рассвете</p>
+        </div>
+      </div>
+      <div class="menu-sheet">
+        <div class="menu-status" aria-label="Status">
+          <span class="menu-chip" id="menu-spot-chip">Пирс</span>
+          <span class="menu-chip" id="menu-tod-chip">Утро</span>
+          <span class="menu-chip" id="menu-rod-chip">Удочка</span>
+        </div>
+        <div class="stat-row">
+          <div class="stat-pill">
+            <span class="stat-label" data-i18n="menu.coins">Монеты</span>
+            <strong id="menu-coins">0</strong>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-label" data-i18n="menu.combo">Комбо</span>
+            <strong id="menu-combo">0</strong>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-label" data-i18n="menu.rank">Ранг</span>
+            <strong id="menu-rank">1</strong>
+          </div>
+        </div>
+        <div class="collection-block">
+          <div class="collection-top">
+            <span data-i18n="menu.collection">Коллекция</span>
+            <span id="menu-collection">0/25</span>
+          </div>
+          <div class="collection-track"><div class="collection-fill" id="menu-collection-fill"></div></div>
+        </div>
+        <button type="button" class="btn btn-primary btn-hero" id="btn-play">
+          <span class="btn-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 14c4-1 7 2 10 1"/><path d="M14 12l6-7"/><circle cx="7" cy="16" r="2.2" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <span data-i18n="menu.play">На пирс</span>
+        </button>
+        <p class="menu-tip" id="menu-tip"></p>
+        <div class="nav-grid nav-grid-3">
+          <button type="button" class="nav-tile" id="btn-journal">
+            <span class="nav-badge tone-lake" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h11a2 2 0 012 2v14H7a2 2 0 01-2-2V4z"/><path d="M9 8h7M9 12h7M9 16h4"/></svg>
+            </span>
+            <span data-i18n="menu.journal">Журнал</span>
+          </button>
+          <button type="button" class="nav-tile" id="btn-aquarium">
+            <span class="nav-badge tone-aqua" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M7 14c2-2 4 2 6 0s3-3 5-1"/></svg>
+            </span>
+            <span data-i18n="menu.aquarium">Аквариум</span>
+          </button>
+          <button type="button" class="nav-tile" id="btn-trophies">
+            <span class="nav-badge tone-gold" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 4h8v3a4 4 0 01-8 0V4z"/><path d="M6 7H4v1a3 3 0 003 3h0M18 7h2v1a3 3 0 01-3 3h0"/><path d="M12 11v3M9 20h6l-1-6h-4l-1 6z"/></svg>
+            </span>
+            <span data-i18n="menu.trophies">Трофеи</span>
+          </button>
+          <button type="button" class="nav-tile" id="btn-shop">
+            <span class="nav-badge tone-coral" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9h12l-1 10H7L6 9z"/><path d="M9 9V7a3 3 0 016 0v2"/></svg>
+            </span>
+            <span data-i18n="menu.shop">Магазин</span>
+          </button>
+          <button type="button" class="nav-tile" id="btn-spots">
+            <span class="nav-badge tone-moss" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21s7-5.2 7-11a7 7 0 10-14 0c0 5.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            </span>
+            <span data-i18n="menu.spots">Места</span>
+          </button>
+          <button type="button" class="nav-tile" id="btn-achievements">
+            <span class="nav-badge tone-gold" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="9" r="5"/><path d="M8 21h8M10 14l-1 7M14 14l1 7"/></svg>
+            </span>
+            <span data-i18n="menu.achievements">Значки</span>
+          </button>
+          <button type="button" class="nav-tile" id="btn-records">
+            <span class="nav-badge tone-lake" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 19V6h14v13"/><path d="M8 10h8M8 14h5"/></svg>
+            </span>
+            <span data-i18n="menu.records">Рекорды</span>
+          </button>
+          <button type="button" class="nav-tile" id="btn-settings">
+            <span class="nav-badge tone-ink" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M3 12h2M19 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+            </span>
+            <span data-i18n="menu.settings">Настройки</span>
+          </button>
+        </div>
+        <div class="quest-card" id="menu-quest"></div>
+        <p class="version">v0.5.5.0 · hiThere games</p>
+      </div>
+    </div>
+
+    <div id="pier" class="screen">
+      <canvas id="game-canvas" width="420" height="720"></canvas>
+
+      <div class="hud top-hud">
+        <button type="button" class="chip-btn" id="btn-pause" aria-label="Pause">
+          <span class="pause-bars"></span>
+        </button>
+        <div class="hud-glass">
+          <span id="hud-rank-label">Ранг 1</span>
+          <span class="hud-sep"></span>
+          <span class="hud-coin" id="hud-coins">0</span>
+          <span class="hud-sep"></span>
+          <span id="hud-tod"></span>
+          <span class="hud-sep"></span>
+          <span id="hud-spot"></span>
+        </div>
+        <button type="button" class="chip-btn" id="btn-menu-from-pier" aria-label="Menu">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+      </div>
+
+      <div class="activity-strip" id="activity-strip">
+        <div class="activity-meta">
+          <span id="hud-weather">Облачно</span>
+          <span class="hud-sep"></span>
+          <span id="hud-activity-label" data-i18n="pier.activity">Клёв</span>
+          <span class="hud-sep"></span>
+          <span id="hud-combo"></span>
+        </div>
+        <div class="activity-track"><div class="activity-fill" id="activity-fill"></div></div>
+        <div class="activity-meta tiny" id="hud-line-wear"></div>
+      </div>
+
+      <div class="pier-side-right" id="pier-side-right">
+        <div class="pier-quest" id="pier-quest"></div>
+        <div class="goals-strip" id="goals-strip"></div>
+      </div>
+      <div class="lucky-banner hidden" id="lucky-banner" data-i18n="pier.lucky">Удачный час!</div>
+
+      <nav class="side-nav" id="pier-side-nav" aria-label="Pier menu">
+        <button type="button" class="side-nav-btn" id="side-shop" data-screen="shop">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9h12l-1 10H7L6 9z"/><path d="M9 9V7a3 3 0 016 0v2"/></svg>
+          <span data-i18n="menu.shop">Магазин</span>
+        </button>
+        <button type="button" class="side-nav-btn" id="side-spots" data-screen="spots">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-5.2 7-11a7 7 0 10-14 0c0 5.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <span data-i18n="menu.spots">Места</span>
+        </button>
+        <button type="button" class="side-nav-btn" id="side-journal" data-screen="journal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h11a2 2 0 012 2v14H7a2 2 0 01-2-2V4z"/><path d="M9 8h7M9 12h7"/></svg>
+          <span data-i18n="menu.journal">Журнал</span>
+        </button>
+        <button type="button" class="side-nav-btn" id="side-achievements" data-screen="achievements">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="9" r="5"/><path d="M8 21h8"/></svg>
+          <span data-i18n="menu.achievements">Значки</span>
+        </button>
+      </nav>
+
+      <div class="pier-bottom" id="pier-bottom">
+        <div class="pier-toast hidden" id="pier-toast" role="status" aria-live="polite">
+          <div class="pier-toast-main">
+            <strong id="pier-toast-title"></strong>
+            <span id="pier-toast-text"></span>
+          </div>
+          <button type="button" class="btn btn-soft pier-toast-rv" id="btn-retry-rv" data-i18n="fail.retryRv">Ещё заброс</button>
+        </div>
+        <p class="hint glass-hint" id="pier-hint"></p>
+        <div class="gear-strip" id="gear-strip">
+          <div class="gear-row" id="gear-row"></div>
+          <button type="button" class="btn chum-btn" id="btn-chum">
+            <span data-i18n="pier.chum">Прикормка</span>
+          </button>
+        </div>
+        <div class="dock" id="pier-dock">
+          <button type="button" class="btn btn-primary btn-cast" id="btn-cast">
+            <span class="btn-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 15c5-2 8 3 12 1"/><path d="M16 12l5-8"/></svg>
+            </span>
+            <span data-i18n="pier.cast">Забросить</span>
+          </button>
+          <button type="button" class="btn btn-hook hidden" id="btn-hook">
+            <span class="btn-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v10"/><path d="M12 13a4 4 0 104 4"/></svg>
+            </span>
+            <span data-i18n="pier.hook">Подсечь!</span>
+            <span class="hook-meter" aria-hidden="true"><i id="hook-meter-fill"></i></span>
+          </button>
+          <div class="fight-panel hidden" id="fight-ui">
+            <div class="fight-label" data-i18n="pier.tension">Натяжение</div>
+            <div class="fight-rail">
+              <svg class="fight-rail-ico net" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="7"/><path d="M5 12h14M12 5v14"/></svg>
+              <div class="fight-track">
+                <div class="fight-green" id="fight-green"></div>
+                <div class="fight-needle" id="fight-needle"></div>
+              </div>
+              <svg class="fight-rail-ico reed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 20c2-6 2-12 0-16M12 20c1-5 3-10 2-16M16 20c2-6 1-11-1-16"/></svg>
+            </div>
+            <div class="fight-progress"><div class="fight-progress-fill" id="fight-progress-fill"></div></div>
+            <p class="micro" data-i18n="pier.fightHelp">Узкая зелёная зона — иначе обрыв или сход</p>
+            <button type="button" class="btn btn-primary btn-wide btn-action-green" id="btn-reel">
+              <span data-i18n="pier.reel">Тянуть</span>
+            </button>
+          </div>
+          <div class="cast-panel hidden" id="cast-ui">
+            <div class="cast-label" data-i18n="pier.power">Сила заброса</div>
+            <div class="cast-track"><div class="cast-fill" id="cast-fill"></div><div class="cast-sweet"></div></div>
+            <p class="micro" data-i18n="pier.castHelp">Отпустите в «сладкой» зоне</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="pause" class="screen overlay">
+      <div class="modal sheet">
+        <h2 data-i18n="pause.title">Пауза</h2>
+        <button type="button" class="btn btn-primary btn-wide" id="btn-resume" data-i18n="pause.resume">Продолжить</button>
+        <button type="button" class="btn btn-soft btn-wide" id="btn-pause-menu" data-i18n="pause.toMenu">В меню</button>
+      </div>
+    </div>
+
+    <div id="catch" class="screen overlay">
+      <div class="modal catch-sheet" id="catch-card">
+        <p class="catch-rarity" id="catch-rarity"></p>
+        <p class="catch-class" id="catch-class"></p>
+        <div class="catch-art" id="catch-art"><canvas id="catch-fish-canvas" width="200" height="110"></canvas></div>
+        <h2 id="catch-name"></h2>
+        <div class="stars" id="catch-stars"></div>
+        <p class="catch-meta" id="catch-meta"></p>
+        <p class="catch-coins" id="catch-coins"></p>
+        <p class="catch-bonus hidden" id="catch-bonus"></p>
+        <div class="catch-actions">
+          <button type="button" class="btn btn-primary" id="btn-sell" data-i18n="catch.sell">Продать</button>
+          <button type="button" class="btn btn-soft" id="btn-keep" data-i18n="catch.keep">В аквариум</button>
+        </div>
+        <button type="button" class="btn btn-soft btn-wide hidden" id="btn-trophy" data-i18n="catch.trophy">На стену трофеев</button>
+        <button type="button" class="btn btn-accent btn-wide hidden" id="btn-double-rv" data-i18n="catch.double">×2 монеты (реклама)</button>
+      </div>
+    </div>
+
+    <div id="fail" class="screen overlay" hidden aria-hidden="true">
+      <div class="modal sheet">
+        <h2 id="fail-title" data-i18n="fail.title">Не вышло</h2>
+        <p id="fail-text" class="modal-copy" data-i18n="fail.text">Спокойно — следующий заброс.</p>
+        <button type="button" class="btn btn-primary btn-wide" id="btn-fail-ok" data-i18n="fail.ok">Ещё раз</button>
+      </div>
+    </div>
+
+    <div id="settings" class="screen">
+      <div class="panel soft-panel">
+        <div class="panel-head">
+          <h2 data-i18n="settings.title">Настройки</h2>
+          <button type="button" class="chip-btn" id="btn-settings-back" aria-label="Back">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+        </div>
+        <div class="setting-row">
+          <span data-i18n="settings.sound">Звук</span>
+          <button type="button" class="btn btn-soft" id="btn-sound-toggle">ON</button>
+        </div>
+        <div class="setting-row">
+          <span data-i18n="settings.lang">Язык</span>
+          <div class="lang-pair">
+            <button type="button" class="btn btn-soft" id="btn-lang-ru">RU</button>
+            <button type="button" class="btn btn-soft" id="btn-lang-en">EN</button>
+          </div>
+        </div>
+        <p class="panel-note" data-i18n="settings.langNote">Автоязык с площадки; здесь можно переключить вручную.</p>
+      </div>
+    </div>
+
+    <div id="journal" class="screen">
+      <div class="panel soft-panel">
+        <div class="panel-head">
+          <h2 data-i18n="journal.title">Журнал</h2>
+          <button type="button" class="chip-btn" id="btn-journal-back" aria-label="Back">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+        </div>
+        <div class="filter-row" id="journal-filters"></div>
+        <div class="panel-body list" id="journal-list"></div>
+      </div>
+    </div>
+
+    <div id="aquarium" class="screen">
+      <div class="panel soft-panel tank-panel">
+        <div class="panel-head">
+          <h2 data-i18n="aquarium.title">Аквариум</h2>
+          <button type="button" class="chip-btn" id="btn-aquarium-back" aria-label="Back">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+        </div>
+        <p class="panel-note" data-i18n="aquarium.note">Витрина улова — не приносит монет. Нажмите, чтобы отпустить.</p>
+        <div class="tank-grid" id="tank-grid"></div>
+      </div>
+    </div>
+
+    <div id="trophies" class="screen">
+      <div class="panel soft-panel tank-panel">
+        <div class="panel-head">
+          <h2 data-i18n="trophies.title">Стена трофеев</h2>
+          <button type="button" class="chip-btn" id="btn-trophies-back" aria-label="Back">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+        </div>
+        <p class="panel-note" data-i18n="trophies.note">Крупные и трофейные экземпляры. Нажмите, чтобы снять.</p>
+        <div class="tank-grid trophy-grid" id="trophy-grid"></div>
+      </div>
+    </div>
+
+    <div id="shop" class="screen">
+      <div class="panel soft-panel">
+        <div class="panel-head">
+          <h2 data-i18n="shop.title">Магазин</h2>
+          <button type="button" class="chip-btn" id="btn-shop-back" aria-label="Back">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+        </div>
+        <p class="coin-line"><span data-i18n="menu.coins">Монеты</span>: <b id="shop-coins">0</b></p>
+        <div class="shop-section">
+          <h3 data-i18n="shop.rods">Удочки</h3>
+          <div id="shop-rods" class="shop-list"></div>
+        </div>
+        <div class="shop-section">
+          <h3 data-i18n="shop.baits">Наживки</h3>
+          <div id="shop-baits" class="shop-list"></div>
+        </div>
+        <div class="shop-section">
+          <h3 data-i18n="shop.hooks">Крючки</h3>
+          <div id="shop-hooks" class="shop-list"></div>
+        </div>
+        <div class="shop-section">
+          <h3 data-i18n="shop.lines">Лески</h3>
+          <div id="shop-lines" class="shop-list"></div>
+        </div>
+        <div class="shop-section">
+          <h3 data-i18n="shop.groundbait">Прикормка</h3>
+          <div id="shop-groundbait" class="shop-list"></div>
+        </div>
+        <div class="shop-section">
+          <h3 data-i18n="shop.bobbers">Поплавки</h3>
+          <div id="shop-bobbers" class="shop-list"></div>
+        </div>
+        <div class="shop-section">
+          <h3 data-i18n="shop.cosmetics">Оформление</h3>
+          <div id="shop-cosmetics" class="shop-list"></div>
+          <button type="button" class="btn btn-accent btn-wide" id="btn-iap-rod-skin" data-i18n="shop.iapRod">Скин удочки (покупка)</button>
+          <button type="button" class="btn btn-soft btn-wide" id="btn-bait-rv" data-i18n="shop.baitRv">Бесплатная наживка (реклама)</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="spots" class="screen">
+      <div class="panel soft-panel">
+        <div class="panel-head">
+          <h2 data-i18n="spots.title">Места ловли</h2>
+          <button type="button" class="chip-btn" id="btn-spots-back" aria-label="Back">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+        </div>
+        <p class="panel-note" data-i18n="spots.note">Открываются с рангом рыбака. Влияют на редкость улова.</p>
+        <div class="panel-body list" id="spots-list"></div>
+      </div>
+    </div>
+
+    <div id="achievements" class="screen">
+      <div class="panel soft-panel">
+        <div class="panel-head">
+          <h2 data-i18n="achievements.title">Значки</h2>
+          <button type="button" class="chip-btn" id="btn-achievements-back" aria-label="Back">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+        </div>
+        <div class="panel-body list" id="achievements-list"></div>
+      </div>
+    </div>
+
+    <div id="records" class="screen">
+      <div class="panel soft-panel">
+        <div class="panel-head">
+          <h2 data-i18n="records.title">Рекорды</h2>
+          <button type="button" class="chip-btn" id="btn-records-back" aria-label="Back">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+        </div>
+        <div class="records-summary" id="records-summary"></div>
+        <div class="panel-body list" id="records-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -7,17 +7,34 @@ function todayKey() {
 }
 
 const TEMPLATES = [
-  { id: 'catch3', type: 'count', target: 3, reward: 25 },
-  { id: 'catch1rare', type: 'rarity', rarity: 'rare', target: 1, reward: 35 },
-  { id: 'catch5', type: 'count', target: 5, reward: 40 },
-  { id: 'catch1epic', type: 'rarity', rarity: 'epic', target: 1, reward: 60 },
-  { id: 'heavy', type: 'weight', target: 500, reward: 30 },
+  { id: 'catch8', type: 'count', target: 8, reward: 112 },
+  { id: 'catch12', type: 'count', target: 12, reward: 175 },
+  { id: 'catch2rare', type: 'rarity', rarity: 'rare', target: 2, reward: 162 },
+  { id: 'catch1epic', type: 'rarity', rarity: 'epic', target: 1, reward: 225 },
+  { id: 'heavy800', type: 'weight', target: 800, reward: 138 },
+  { id: 'heavy1200', type: 'weight', target: 1200, reward: 212 },
+  { id: 'large2', type: 'cls', cls: 'large', target: 2, reward: 175 },
+  { id: 'prize1', type: 'cls', cls: 'prize', target: 1, reward: 275 },
+  { id: 'catch20', type: 'count', target: 20, reward: 220 },
+  { id: 'catch2epic', type: 'rarity', rarity: 'epic', target: 2, reward: 320 },
+  { id: 'heavy1800', type: 'weight', target: 1800, reward: 260 },
+  { id: 'large4', type: 'cls', cls: 'large', target: 4, reward: 240 },
 ];
+
+const GOALS_VER = 3;
 
 export function ensureGoals(save) {
   const key = todayKey();
-  if (save.goalsDate === key && Array.isArray(save.goals) && save.goals.length) return save;
+  if (
+    save.goalsVer === GOALS_VER &&
+    save.goalsDate === key &&
+    Array.isArray(save.goals) &&
+    save.goals.length
+  ) {
+    return save;
+  }
   const shuffled = [...TEMPLATES].sort(() => Math.random() - 0.5);
+  save.goalsVer = GOALS_VER;
   save.goalsDate = key;
   save.goalClaimed = false;
   save.goals = shuffled.slice(0, 3).map((g) => ({
@@ -35,6 +52,13 @@ export function onCatchGoals(save, catchInfo) {
     if (g.type === 'count') g.progress += 1;
     if (g.type === 'rarity' && catchInfo.fish.rarity === g.rarity) g.progress += 1;
     if (g.type === 'weight' && catchInfo.weight >= g.target) g.progress = g.target;
+    if (g.type === 'cls') {
+      const cls = catchInfo.catchClass;
+      const ok =
+        (g.cls === 'prize' && (cls === 'prize' || cls === 'trophy')) ||
+        (g.cls === 'large' && (cls === 'large' || cls === 'prize' || cls === 'trophy'));
+      if (ok) g.progress += 1;
+    }
     if (g.progress >= g.target) g.done = true;
   }
   let bonus = 0;
@@ -47,12 +71,21 @@ export function onCatchGoals(save, catchInfo) {
 }
 
 export function goalLabel(g) {
-  if (g.type === 'count') return `${t('goal.progress')}: ${g.progress}/${g.target}`;
+  const fishWord = t('goal.fishUnit');
+  if (g.type === 'count') return `${t('goal.progress')}: ${g.progress}/${g.target} ${fishWord}`;
   if (g.type === 'rarity') {
     const r = t(`rarity.${g.rarity}`);
-    return `${r}: ${g.progress}/${g.target}`;
+    return `${r}: ${g.progress}/${g.target} ${fishWord}`;
   }
-  if (g.type === 'weight') return `≥${g.target}g: ${g.done ? '✓' : '…'}`;
+  if (g.type === 'weight') {
+    return g.done
+      ? `${t('goal.weight')}: ≥${g.target} g ✓`
+      : `${t('goal.weight')}: ≥${g.target} g`;
+  }
+  if (g.type === 'cls') {
+    const name = t(`catch.class.${g.cls === 'prize' ? 'prize' : 'large'}`);
+    return `${name}: ${g.progress}/${g.target} ${fishWord}`;
+  }
   return g.id;
 }
 

@@ -47,28 +47,37 @@ function installMock() {
   };
 }
 
+function withTimeout(promise, ms, label = 'timeout') {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error(label)), ms);
+    }),
+  ]);
+}
+
 export async function initYandexSdk() {
   if (!window.YaGames) {
     installMock();
   }
   try {
-    ysdk = await window.YaGames.init();
+    ysdk = await withTimeout(window.YaGames.init(), 4000, 'ysdk-init');
   } catch {
     installMock();
     ysdk = await window.YaGames.init();
   }
 
   try {
-    player = await ysdk.getPlayer();
+    player = await withTimeout(ysdk.getPlayer(), 2500, 'ysdk-player');
   } catch {
     player = null;
   }
 
   try {
-    payments = await ysdk.getPayments({ signed: false });
+    payments = await withTimeout(ysdk.getPayments({ signed: false }), 2500, 'ysdk-pay');
   } catch {
     try {
-      payments = await ysdk.getPayments?.();
+      payments = await withTimeout(ysdk.getPayments?.() || Promise.resolve(null), 1500, 'ysdk-pay2');
     } catch {
       payments = null;
     }

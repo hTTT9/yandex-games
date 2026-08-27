@@ -39,7 +39,6 @@ html, body {
 .hud-glass,
 .activity-strip,
 .quest-card,
-.menu-sheet,
 .soft-panel,
 .modal,
 .sheet,
@@ -100,8 +99,17 @@ html, body {
 }
 
 #menu .brand {
-  color: #fff8ec;
+  color: #ffe7a0;
   text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(0, 0, 0, 0.45);
+}
+
+#menu.menu-v2 .menu-sheet .btn-hero {
+  text-shadow: none;
+}
+
+#menu.menu-v2 .menu-link-txt strong,
+#menu.menu-v2 .menu-link-txt em {
+  text-shadow: none;
 }
 
 #menu .menu-tag {
@@ -122,14 +130,19 @@ html, body {
 /* —— Menu as classic lobby —— */
 #menu { background: #082030; }
 
-.menu-sheet {
-  border-radius: 22px 22px 0 0;
-  border-width: 2px 0 0;
-  padding: 16px 14px calc(16px + var(--safe-b));
-  gap: 10px;
-  background-image:
-    linear-gradient(180deg, rgba(14, 46, 68, 0.96), rgba(8, 28, 44, 0.98)),
-    var(--frame-shine);
+#menu.menu-v2 .menu-sheet {
+  border-radius: 28px 28px 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background-image: none;
+  background: rgba(8, 28, 44, 0.66);
+  box-shadow: 0 -16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+@media (min-width: 860px) {
+  #menu.menu-v2 .menu-sheet {
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
 }
 
 .menu-hero-fade {
@@ -154,6 +167,13 @@ html, body {
   border: 2px solid transparent;
   background-origin: border-box;
   background-clip: padding-box, border-box;
+}
+
+#menu.menu-v2 .menu-tip {
+  background-image: none;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(220, 232, 240, 0.88);
 }
 
 .stat-pill {
@@ -192,10 +212,28 @@ html, body {
 .quest-card {
   border-radius: 14px;
   color: var(--ink-soft);
+  margin-top: 0;
+  background-image:
+    linear-gradient(180deg, rgba(14, 48, 72, 0.92), rgba(8, 30, 48, 0.92)),
+    var(--frame-shine);
+  border: 2px solid transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  color: #fff;
 }
 
 .quest-card strong { color: var(--gold-hi); }
 .quest-card.done { color: #7dffb0; }
+
+#menu.menu-v2 .menu-sheet .quest-card {
+  background-image: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+  color: rgba(220, 232, 240, 0.88);
+}
+
+#menu.menu-v2 .menu-sheet .quest-card strong { color: #fff; }
 
 /* —— Buttons —— */
 .btn {
@@ -278,7 +316,7 @@ html, body {
   font-size: 12px;
   color: #fff;
   background-image:
-    linear-gradient(180deg, rgba(14, 48, 72, 0.9), rgba(8, 30, 48, 0.9)),
+    linear-gradient(180deg, rgba(10, 36, 56, 0.96), rgba(6, 24, 40, 0.97)),
     var(--frame-shine);
 }
 
@@ -293,10 +331,11 @@ html, body {
 
 .activity-strip {
   border-radius: 14px;
-  top: calc(56px + var(--safe-t));
+  top: auto;
   background-image:
-    linear-gradient(180deg, rgba(12, 42, 64, 0.88), rgba(8, 28, 46, 0.88)),
+    linear-gradient(180deg, rgba(8, 30, 48, 0.97), rgba(5, 20, 34, 0.98)),
     var(--frame-shine);
+  backdrop-filter: blur(12px);
 }
 
 .activity-meta { color: #fff; }
@@ -305,9 +344,7 @@ html, body {
 .activity-fill { background: linear-gradient(90deg, #2fb86a, #8dffb8); }
 
 .pier-side-right {
-  top: calc(108px + var(--safe-t));
-  right: 10px;
-  width: min(46%, 196px);
+  display: none;
 }
 
 .goals-strip { width: 100%; }
@@ -337,7 +374,7 @@ html, body {
   font-size: 12px;
   font-weight: 700;
   color: var(--ink-soft);
-  text-align: right;
+  text-align: left;
   background-image:
     linear-gradient(180deg, rgba(14, 48, 72, 0.92), rgba(8, 30, 48, 0.92)),
     var(--frame-shine);
@@ -362,9 +399,37 @@ html, body {
   z-index: 7;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: stretch;
+  gap: 6px;
   opacity: 0.92;
+  pointer-events: auto;
 }
+
+.side-nav-toggle {
+  align-self: flex-start;
+}
+
+.side-nav-toggle[aria-expanded="false"] svg {
+  transform: rotate(180deg);
+}
+
+.side-nav-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: opacity 0.16s ease, transform 0.16s ease, max-height 0.2s ease;
+  max-height: 420px;
+  overflow: hidden;
+}
+
+.side-nav.collapsed .side-nav-body {
+  opacity: 0;
+  transform: translateX(-8px);
+  max-height: 0;
+  pointer-events: none;
+}
+
+/* Keep toggle in place — do not jump to the top when collapsed */
 
 .side-nav-btn {
   width: 52px;
@@ -394,9 +459,14 @@ html, body {
 
 .activity-strip {
   background-image:
-    linear-gradient(180deg, rgba(10, 32, 50, 0.62), rgba(8, 24, 40, 0.68)),
+    linear-gradient(180deg, rgba(8, 30, 48, 0.97), rgba(5, 20, 34, 0.98)),
     var(--frame-shine);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+}
+
+.quest-dock .pier-quest {
+  text-align: left;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
 }
 
 .pier-quest {
@@ -419,18 +489,18 @@ html, body {
 
 #pier .hud-glass {
   background-image:
-    linear-gradient(180deg, rgba(10, 32, 50, 0.7), rgba(8, 24, 40, 0.78)),
+    linear-gradient(180deg, rgba(10, 36, 56, 0.96), rgba(6, 24, 40, 0.97)),
     var(--frame-shine);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
 }
 
-/* Let the lake breathe: quieter chrome while fishing */
+/* Keep quest readable while fishing — do not wash out the activity strip */
 #pier.busy .pier-side-right {
-  display: none !important;
+  opacity: 1;
 }
 
 #pier.busy .activity-strip {
-  opacity: 0.45;
+  opacity: 1;
 }
 
 .side-nav-btn svg {
@@ -453,39 +523,18 @@ html, body {
   border: 2px solid #a87828;
 }
 
-.gear-slot {
-  flex: 0 0 auto;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
+.gear-chip {
   border: 2px solid transparent;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1px;
-  font: inherit;
-  cursor: pointer;
   background-image:
-    radial-gradient(circle at 35% 30%, rgba(255,255,255,0.18), transparent 50%),
     linear-gradient(180deg, #1c4e6e, #0e2c42),
     var(--frame-shine);
   background-origin: border-box;
   background-clip: padding-box, border-box;
-  color: #fff;
 }
-
-.gear-slot.active {
+.gear-chip.active {
   box-shadow: 0 0 0 2px #55e08a, 0 4px 12px rgba(0,0,0,0.35);
 }
-
-.gear-slot .g-ico {
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--gold-hi);
-  line-height: 1;
-}
+.gear-chip .g-ico { color: var(--gold-hi); }
 
 .gear-slot .g-lab {
   font-size: 8px;
@@ -499,6 +548,7 @@ html, body {
 
 .chum-btn {
   border-radius: 14px;
+  max-width: 92px;
   background-image:
     linear-gradient(180deg, #2a6a90, #163e58),
     var(--frame-shine);
@@ -515,17 +565,25 @@ html, body {
   color: #0c2a18;
 }
 
-#pier.busy .side-nav,
-#pier.busy .gear-strip {
+#pier.busy .side-nav {
   display: none !important;
+}
+
+#pier.busy:not(.multi-cast) .gear-strip {
+  display: none !important;
+}
+
+#pier.busy.multi-cast .gear-strip {
+  display: flex !important;
+  opacity: 0.95;
 }
 
 #pier.busy .pier-side-right {
-  display: none !important;
+  opacity: 1;
 }
 
 #pier.busy .activity-strip {
-  opacity: 0.45;
+  opacity: 1;
 }
 
 #pier.busy .glass-hint {
@@ -665,17 +723,17 @@ html, body {
 .tank-slot {
   border: 2px solid transparent;
   background-image:
-    radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.25), transparent 55%),
-    linear-gradient(180deg, #2a6a80, #134858),
+    radial-gradient(ellipse at 50% 18%, rgba(255,255,255,0.45), transparent 55%),
+    linear-gradient(180deg, #b8dce8 0%, #5a9eb4 55%, #2f6f84 100%),
     var(--frame-shine);
   background-origin: border-box;
   background-clip: padding-box, border-box;
-  color: #fff;
+  color: #102028;
 }
 
 .tank-slot.empty-dash {
   background-image:
-    linear-gradient(180deg, #1a3a50, #102838),
+    linear-gradient(180deg, rgba(20, 48, 68, 0.9), rgba(12, 32, 48, 0.95)),
     var(--frame-shine);
   color: var(--ink-soft);
 }
@@ -715,7 +773,10 @@ html, body {
 #shop .soft-panel,
 #spots .soft-panel,
 #achievements .soft-panel,
-#records .soft-panel {
+#records .soft-panel,
+#profile .soft-panel,
+#friends .soft-panel,
+#inventory .soft-panel {
   background: linear-gradient(180deg, #143650 0%, #0c2438 55%, #081c2c 100%) !important;
   background-image: none !important;
   color: #f4f7fb;
@@ -834,3 +895,555 @@ html, body {
 .boot-title { color: var(--gold-hi); }
 .boot-sub { color: var(--ink-soft); }
 .boot-ripple { border-color: rgba(232, 196, 90, 0.5); }
+
+
+.tutorial-card {
+  background-image:
+    linear-gradient(180deg, rgba(14, 48, 72, 0.98), rgba(8, 30, 48, 0.98)),
+    var(--frame-shine);
+  border: 2px solid transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+
+.pier-side-right {
+  display: none;
+}
+
+.quest-fab {
+  background-image:
+    linear-gradient(180deg, rgba(14, 48, 72, 0.98), rgba(8, 30, 48, 0.98)),
+    var(--frame-shine);
+  border: 2px solid transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  color: #fff;
+}
+
+.quest-panel .pier-quest,
+.quest-panel .goal-chip {
+  font-size: 10px;
+}
+
+.shop-h3 { color: var(--gold-hi); }
+.profile-stat,
+.friend-row,
+.friend-card {
+  background-image:
+    linear-gradient(180deg, rgba(18, 56, 82, 0.95), rgba(10, 34, 52, 0.95)),
+    var(--frame-shine);
+  color: #fff;
+}
+.profile-stat span,
+.friend-card p { color: var(--ink-soft); }
+
+.tank-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.tank-slot { border-radius: 14px; aspect-ratio: 1; font-size: 10px; padding: 6px 5px; }
+#aquarium .tank-slot.filled { color: #102028; }
+.browse-fab, .pier-browse {
+  background-image: linear-gradient(180deg, rgba(14, 48, 72, 0.95), rgba(8, 30, 48, 0.95)), var(--frame-shine);
+  border: 2px solid transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+.sheet-tab.on { color: #1a2a18; }
+
+/* Gameplay concept: compact contextual dock, world remains the focus. */
+.rig-summary-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rig-summary-row .rod-banner-sub {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.rig-settings-btn {
+  width: auto;
+  min-width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 10px;
+  border: 1px solid rgba(232, 196, 90, 0.35);
+  border-radius: 10px;
+  background: rgba(8, 28, 44, 0.82);
+  color: #e8c45a;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.rig-choice {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.rig-choice.hidden {
+  display: none !important;
+}
+
+.rig-choice-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(232, 196, 90, 0.35);
+  background: rgba(10, 32, 48, 0.92);
+  color: #f4f7fb;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.rig-choice-btn:active {
+  transform: scale(0.98);
+}
+
+/* Fishing concept: the world stays dominant, controls form one contextual dock. */
+#pier .top-hud .hud-glass,
+#pier .top-hud .chip-btn {
+  border-width: 1px;
+  border-color: rgba(255, 255, 255, 0.18);
+  background-image: none;
+  background-color: rgba(7, 27, 42, 0.76);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+#pier .pier-top-row {
+  top: calc(60px + var(--safe-t));
+  left: 12px;
+  right: 12px;
+}
+
+#pier .pier-wear-center {
+  width: min(260px, 56vw);
+}
+
+#pier .pier-top-stack {
+  top: auto;
+  left: auto;
+  right: auto;
+  width: auto;
+  max-width: min(250px, calc(100% - 56px));
+}
+
+#pier .pier-top-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  max-width: min(230px, 42%);
+}
+
+#pier .pier-bottom {
+  left: 50%;
+  right: auto;
+  bottom: calc(8px + var(--safe-b));
+  width: min(720px, calc(100% - 16px));
+  padding: 0;
+  gap: 5px;
+  background: none;
+  transform: translateX(-50%);
+}
+
+#pier .gear-strip {
+  padding: 7px;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  border-radius: 18px 18px 8px 8px;
+  background: rgba(7, 27, 42, 0.82);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+#pier .gear-row {
+  gap: 6px;
+  padding: 0;
+  overflow: hidden;
+}
+
+#pier .gear-chip.tone-loadout {
+  display: flex;
+  flex: 1 1 0;
+  max-width: none;
+  height: 46px;
+  border-width: 1px;
+  border-radius: 11px;
+  background-image: none;
+  background-color: rgba(255, 255, 255, 0.045);
+  box-shadow: none;
+}
+
+#pier .gear-chip.tone-loadout.active {
+  border-color: rgba(85, 224, 138, 0.65);
+  background-color: rgba(35, 99, 91, 0.42);
+  box-shadow: inset 0 -2px 0 #55e08a;
+  outline: 0;
+}
+
+#pier .dock {
+  gap: 6px;
+  margin-top: -5px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px 8px 18px 18px;
+  background: rgba(7, 27, 42, 0.86);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+#pier .glass-hint {
+  order: -2;
+  margin-bottom: 1px;
+  font-size: 12px;
+}
+
+#pier .hook-row {
+  gap: 6px;
+}
+
+#pier .hook-row #btn-hook {
+  min-height: 58px;
+  max-height: 62px;
+  padding: 8px 14px 13px;
+  border-radius: 13px;
+  font-size: 18px;
+}
+
+#pier .hook-row .rod-banner {
+  margin-bottom: 0;
+  border-color: rgba(210, 150, 240, 0.42);
+  background: rgba(45, 31, 68, 0.76);
+}
+
+#pier .line-card {
+  min-height: 36px;
+  border-width: 1px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+#pier .line-card.phase-bite {
+  border-color: rgba(210, 150, 240, 0.62);
+  background: rgba(72, 42, 92, 0.42);
+}
+
+@media (max-width: 699px), (orientation: portrait) and (max-width: 859px) {
+  #pier .pier-browse-anchor {
+    right: 12px;
+    top: 36%;
+  }
+
+  #pier .pier-browse {
+    max-height: min(42vh, 310px);
+  }
+
+  #pier .pier-top-row {
+    top: calc(54px + var(--safe-t));
+    left: 48px;
+    right: 12px;
+  }
+
+  #pier .meta-collapse-fixed {
+    left: 8px;
+  }
+
+  #pier .pier-wear-center {
+    width: min(240px, 62%);
+  }
+
+  #pier .pier-top-stack {
+    top: auto;
+    left: auto;
+    width: auto;
+    max-width: min(250px, calc(100% - 48px));
+    gap: 5px;
+  }
+
+  #pier .pier-top-right {
+    max-width: min(210px, 52%);
+  }
+
+  #pier .activity-strip {
+    padding: 6px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 12px;
+    background-image: none;
+    background-color: rgba(7, 27, 42, 0.78);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  #pier .quest-dock .quest-panel {
+    max-height: 168px;
+    gap: 5px;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 13px;
+    background: rgba(7, 27, 42, 0.88);
+    box-shadow: 0 9px 24px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  #pier .quest-dock.collapsed .quest-panel,
+  #pier .quest-panel.collapsed {
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+  }
+
+  #pier .quest-panel .pier-quest {
+    min-height: 0;
+    padding: 7px 8px;
+    border: 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.055);
+    box-shadow: none;
+  }
+
+  #pier .quest-panel .pier-quest strong {
+    display: block;
+    margin: 0 0 2px;
+    font-size: 9px;
+  }
+
+  #pier .quest-panel .pier-quest .pq-name {
+    display: block;
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  #pier .quest-panel .pier-quest .pq-desc,
+  #pier .quest-panel .pier-quest span {
+    display: block;
+    font-size: 10px;
+    line-height: 1.3;
+    white-space: normal;
+  }
+
+  #pier .quest-panel .goals-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  #pier .quest-panel .goal-chip {
+    min-width: 0;
+    min-height: 0;
+    padding: 5px 7px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background-image: none;
+    background-color: rgba(255, 255, 255, 0.045);
+    box-shadow: none;
+    font-size: 10px;
+    line-height: 1.25;
+    text-align: left;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+}
+
+@media (min-width: 700px) and (orientation: landscape) {
+  #pier .top-hud {
+    left: 50%;
+    right: auto;
+    top: calc(10px + var(--safe-t));
+    width: min(720px, calc(100% - 220px));
+    padding: 0;
+    transform: translateX(-50%);
+  }
+
+  #pier .top-hud .hud-glass {
+    min-height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+    background-image: none;
+    background: rgba(8, 28, 44, 0.62);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  #pier .top-hud .chip-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+    background-image: none;
+    background: rgba(8, 28, 44, 0.68);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+  }
+
+  #pier .pier-top-row {
+    top: calc(60px + var(--safe-t));
+    left: 92px;
+    right: 14px;
+  }
+
+  #pier .pier-top-stack {
+    top: auto;
+    left: auto;
+    right: auto;
+    width: auto;
+    max-width: min(240px, calc(100% - 56px));
+  }
+
+  #pier .activity-strip {
+    padding: 6px 9px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background-image: none;
+    background: rgba(8, 28, 44, 0.62);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+  }
+
+  #pier .side-nav {
+    left: 14px;
+    top: 50%;
+    gap: 7px;
+    transform: translateY(-50%);
+  }
+
+  #pier .side-nav-btn {
+    width: 54px;
+    min-height: 52px;
+    border-radius: 13px;
+    background-image:
+      linear-gradient(180deg, rgba(20, 54, 70, 0.82), rgba(8, 31, 46, 0.88)),
+      var(--frame-shine);
+  }
+
+  #pier .pier-bottom {
+    left: 50%;
+    right: auto;
+    bottom: calc(12px + var(--safe-b));
+    width: min(720px, calc(100% - 190px));
+    padding: 0;
+    gap: 5px;
+    background: none;
+    transform: translateX(-50%);
+  }
+
+  #pier .glass-hint {
+    order: -2;
+    margin-bottom: 2px;
+    font-size: 12px;
+  }
+
+  #pier .gear-strip {
+    order: -1;
+    padding: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+    border-radius: 18px 18px 8px 8px;
+    background: rgba(8, 28, 44, 0.78);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  #pier .gear-row {
+    width: 100%;
+    padding: 0;
+    gap: 5px;
+    overflow: visible;
+  }
+
+  #pier .gear-chip {
+    display: none;
+  }
+
+  #pier .gear-chip.tone-loadout {
+    display: flex;
+    flex: 1 1 0;
+    max-width: none;
+    height: 40px;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: none;
+  }
+
+  #pier .gear-chip.tone-loadout.active {
+    border-color: rgba(85, 224, 138, 0.6);
+    background: rgba(35, 99, 91, 0.38);
+    box-shadow: inset 0 -2px 0 #55e08a;
+    outline: 0;
+  }
+
+  #pier .gear-chip.tone-loadout .g-sub {
+    max-width: 150px;
+  }
+
+  #pier .chum-btn {
+    display: none;
+  }
+
+  #pier .dock {
+    gap: 6px;
+    margin-top: -5px;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px 8px 18px 18px;
+    background: rgba(8, 28, 44, 0.82);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  #pier .cast-loadout-picker,
+  #pier .cast-banner {
+    display: none !important;
+  }
+
+  #pier .rig-summary-row {
+    min-height: 36px;
+  }
+
+  #pier .rod-banner-sub {
+    padding: 8px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #d7e6ed;
+    font-size: 11px;
+  }
+
+  #pier .lines-strip {
+    margin: 0;
+    gap: 5px;
+  }
+
+  #pier .line-card {
+    min-height: 34px;
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.045);
+  }
+
+  #pier .btn-cast,
+  #pier #btn-hook,
+  #pier #btn-reel {
+    min-height: 48px;
+    border-radius: 12px;
+  }
+}
